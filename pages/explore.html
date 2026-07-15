@@ -1,74 +1,201 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klartext Medizin | Dashboard</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        theme: '#3b82f6',
-                        'theme-light': '#60a5fa',
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lernbegleiter Digital | Emergency Echocardiography Simulation (Mockup)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220; /* deep blue-gray */
+      --panel:#0f1724;
+      --muted:#9aa8b3;
+      --accent:#14b8a6; /* teal/cyan */
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,var(--bg) 0%, #07111a 100%);color:#e6eef2}
+    /* disable any pointer interactions for the mockup so it's clearly static */
+    .no-interact *{pointer-events:none}
+    /* large, soft shadows */
+    .soft-card{box-shadow:0 20px 50px rgba(2,6,23,0.7);border-radius:1rem}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.03)}
+    .accent{color:var(--accent)}
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+<body class="min-h-screen text-slate-100">
+  <div class="max-w-7xl mx-auto px-6 py-8">
 
-    <div id="app-header"></div>
-
-    <main class="flex-grow container mx-auto px-4 pt-24 pb-20 max-w-7xl">
-        
-        <div class="mb-10 animate-fade-in-up">
-            <h1 id="dynamic-greeting" class="text-4xl font-extrabold text-slate-900 mb-2">Guten Morgen, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"></span> 👋</h1>
-            <p class="text-slate-500 text-lg">Hier sind die neuesten Module für deine Weiterbildung.</p>
+    <!-- Header / Fake Progress -->
+    <header class="flex items-center justify-between mb-8">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center text-xl font-bold">L</div>
+        <div>
+          <div class="text-sm text-slate-300 font-semibold">Lernbegleiter Digital</div>
+          <div class="text-xs text-slate-500">Emergency Echocardiography Simulation</div>
         </div>
+      </div>
 
-        <div id="hero-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-24 min-h-[500px] animate-fade-in">
-            <div class="lg:col-span-3 h-full flex items-center justify-center bg-slate-100 rounded-3xl animate-pulse p-10">
-                <span class="text-slate-400 font-medium">Lade Module im Fokus...</span>
+      <div class="w-1/3 max-w-xs">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span>EFN Status</span>
+          <span class="text-slate-200 font-semibold">Stabil</span>
+        </div>
+        <div class="h-3 rounded-full bg-[rgba(255,255,255,0.04)] overflow-hidden soft-card glass">
+          <div style="width:64%" class="h-full bg-gradient-to-r from-[rgba(20,184,166,0.9)] to-[rgba(45,212,191,0.8)]"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-12 gap-8">
+
+      <!-- Main content: large video placeholder -->
+      <section class="col-span-8">
+        <div class="rounded-2xl soft-card glass overflow-hidden">
+          <div class="p-6 border-b border-[rgba(255,255,255,0.03)]">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-2xl font-extrabold">Clip starten</h2>
+                <p class="text-sm text-slate-400">Transösophageale Echokardiographie — Loop (statisch, visuelles Mockup)</p>
+              </div>
+              <div class="text-sm text-slate-400">Dauer: 00:30</div>
             </div>
-        </div>
+          </div>
 
-        <div class="relative bg-slate-900 rounded-3xl p-10 overflow-hidden shadow-2xl mb-20 text-white group mt-12 z-10">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-30 group-hover:opacity-50 transition-opacity duration-1000"></div>
-            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                    <h2 class="text-3xl font-bold mb-2">Mein Bereich</h2>
-                    <p class="text-slate-400 text-lg max-w-md">Du hast 3 begonnene Module. Mach dort weiter, wo du aufgehört hast.</p>
+          <div class="p-10 flex items-center justify-center" style="min-height:420px;background:linear-gradient(180deg, rgba(9,20,30,0.6), rgba(6,12,18,0.7));">
+            <!-- Big visual placeholder for video loop -->
+            <div class="w-full max-w-4xl h-80 rounded-xl bg-gradient-to-b from-[#06121a] to-[#072029] border border-[rgba(255,255,255,0.03)] flex items-center justify-center">
+              <div class="flex flex-col items-center gap-4">
+                <div class="w-28 h-28 rounded-full bg-[rgba(20,184,166,0.12)] flex items-center justify-center">
+                  <!-- play icon (SVG purely decorative) -->
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-[#a7fff0]">
+                    <path d="M5 3v18l15-9L5 3z" fill="url(#g)"/>
+                    <defs>
+                      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#06b6d4" stop-opacity="0.9" />
+                        <stop offset="1" stop-color="#10b981" stop-opacity="0.9" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
-                <button class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-white/10 flex items-center gap-2">
-                    Zu meinen Modulen <span>➜</span>
-                </button>
+                <div class="text-center">
+                  <div class="text-lg font-semibold">Transösophagealer Loop (Visual)</div>
+                  <div class="text-sm text-slate-400">Statischer Placeholder — keine Wiedergabe / keine Interaktion</div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <div class="p-6 border-t border-[rgba(255,255,255,0.02)] bg-[rgba(255,255,255,0.01)]">
+            <div class="flex items-center gap-3">
+              <button class="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0ea5a4] to-[#0891b2] text-black font-semibold">Clip starten</button>
+              <button class="px-4 py-2 rounded-lg border border-[rgba(255,255,255,0.04)] text-sm text-slate-300">Loop anzeigen</button>
+              <div class="ml-auto text-sm text-slate-400">Case-ID: ECHO-2026-042</div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center justify-between mb-8">
-            <h3 class="text-2xl font-bold text-slate-800">Alle Module</h3>
-            <div class="flex gap-2">
-                <button class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:border-blue-500 hover:text-blue-500 transition-colors">A-Z</button>
-            </div>
+        <!-- Static multiple-choice area (visual only) -->
+        <div class="mt-8">
+          <div class="rounded-xl soft-card glass p-6">
+            <h3 class="text-lg font-bold mb-3">Fiktive Diagnose-Auswahl</h3>
+            <p class="text-sm text-slate-400 mb-4">Wähle die wahrscheinlichste Befundkategorie (rein visuell).</p>
+
+            <form class="space-y-4 no-interact">
+              <label class="flex items-center gap-4 p-4 rounded-lg bg-[rgba(255,255,255,0.01)] border border-[rgba(255,255,255,0.02)]">
+                <input type="radio" name="diag" class="w-4 h-4 accent-[#06b6d4]" />
+                <div>
+                  <div class="font-semibold">Perikardtamponade (simuliert)</div>
+                  <div class="text-xs text-slate-400">Septische Erguss-ähnliche Präsentation — visuelles Beispiel</div>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-4 p-4 rounded-lg bg-[rgba(255,255,255,0.01)] border border-[rgba(255,255,255,0.02)]">
+                <input type="radio" name="diag" class="w-4 h-4 accent-[#06b6d4]" />
+                <div>
+                  <div class="font-semibold">Akute Rechtsherzbelastung</div>
+                  <div class="text-xs text-slate-400">Dilatation / reduzierte Kontraktilität (Mockup)</div>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-4 p-4 rounded-lg bg-[rgba(255,255,255,0.01)] border border-[rgba(255,255,255,0.02)]">
+                <input type="radio" name="diag" class="w-4 h-4 accent-[#06b6d4]" />
+                <div>
+                  <div class="font-semibold">Normalbefund</div>
+                  <div class="text-xs text-slate-400">Keine auffälligen Strukturen — fiktive Auswahl</div>
+                </div>
+              </label>
+
+              <div class="mt-6 flex items-center gap-4">
+                <button type="button" class="px-5 py-2 rounded-lg bg-[#0ea5a4] text-black font-semibold">Test abschließen</button>
+                <div class="text-sm text-slate-500">Alle Auswahlmöglichkeiten sind rein illustrativ und nicht funktional.</div>
+              </div>
+            </form>
+          </div>
         </div>
 
-        <div id="wbt-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      </section>
+
+      <!-- Sidebar: concise metadata & fake progress -->
+      <aside class="col-span-4">
+        <div class="rounded-2xl soft-card glass p-6 sticky top-8">
+          <h4 class="text-md font-bold mb-2">Case Monitor</h4>
+          <p class="text-sm text-slate-400 mb-4">Echokardiografie — Szenario: Notfall</p>
+
+          <div class="mb-4">
+            <div class="text-xs text-slate-400 mb-2">Visuelle Bewertung</div>
+            <div class="h-2 rounded-full bg-[rgba(255,255,255,0.03)] overflow-hidden">
+              <div style="width:46%" class="h-full bg-gradient-to-r from-[#06b6d4] to-[#10b981]"></div>
             </div>
+            <div class="text-xs text-slate-500 mt-2">EFN Status: <span class="font-semibold text-slate-200">46%</span></div>
+          </div>
+
+          <div class="mb-4">
+            <div class="text-xs text-slate-400 mb-2">Simulated Score</div>
+            <div class="w-full h-12 rounded-lg bg-[rgba(255,255,255,0.02)] flex items-center justify-center">
+              <div class="text-xl font-bold">—</div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <div class="text-xs text-slate-400 mb-2">Patienteninfo (fiktiv)</div>
+            <ul class="text-sm text-slate-300 space-y-1">
+              <li>Alter: 65</li>
+              <li>RR: 110/70</li>
+              <li>HF: 98/min</li>
+            </ul>
+          </div>
+
+          <div class="pt-4 border-t border-[rgba(255,255,255,0.02)]">
+            <div class="text-xs text-slate-400 mb-2">Session</div>
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-3 h-3 rounded-full bg-[#06b6d4]"></div>
+              <div class="text-sm">Live Preview (Mock)</div>
+            </div>
+            <div class="text-xs text-slate-500">Letzte Aktion: <span class="text-slate-300">Clip geladen</span></div>
+          </div>
+        </div>
+
+        <!-- stack of small cards for additional static info -->
+        <div class="mt-6 space-y-4">
+          <div class="p-4 rounded-xl glass soft-card">
+            <div class="text-sm font-semibold">Leitlinien</div>
+            <div class="text-xs text-slate-400 mt-1">ACLS / Echo-Assessment (nur visuell)</div>
+          </div>
+
+          <div class="p-4 rounded-xl glass soft-card">
+            <div class="text-sm font-semibold">Protokoll</div>
+            <div class="text-xs text-slate-400 mt-1">Standardisierte Echo-Slices (Mockup)</div>
+          </div>
+        </div>
+
+      </aside>
 
     </main>
 
-    <div id="app-footer"></div>
-
-    <script src="../assets/js/components.js"></script>
-    <script src="../assets/js/data-loader.js"></script>
-    <script src="../assets/js/page-explore.js"></script>
+    <!-- Footer minimal -->
+    <footer class="mt-12 text-center text-xs text-slate-500">© 2026 Lernbegleiter Digital — Visual Mockup. Keine klinische Anwendung.</footer>
+  </div>
 </body>
 </html>
