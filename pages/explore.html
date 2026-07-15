@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klartext Medizin | Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        theme: '#3b82f6',
+                        'theme-light': '#60a5fa',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+
+    <div id="app-header"></div>
+
+    <main class="flex-grow container mx-auto px-4 pt-24 pb-20 max-w-7xl">
+        
+        <div class="mb-10 animate-fade-in-up">
+            <h1 id="dynamic-greeting" class="text-4xl font-extrabold text-slate-900 mb-2">Guten Morgen, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"></span> 👋</h1>
+            <p class="text-slate-500 text-lg">Hier sind die neuesten Module für deine Weiterbildung.</p>
+        </div>
+
+        <div id="hero-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-24 min-h-[500px] animate-fade-in">
+            <div class="lg:col-span-3 h-full flex items-center justify-center bg-slate-100 rounded-3xl animate-pulse p-10">
+                <span class="text-slate-400 font-medium">Lade Module im Fokus...</span>
+            </div>
+        </div>
+
+        <div class="relative bg-slate-900 rounded-3xl p-10 overflow-hidden shadow-2xl mb-20 text-white group mt-12 z-10">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-30 group-hover:opacity-50 transition-opacity duration-1000"></div>
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Mein Bereich</h2>
+                    <p class="text-slate-400 text-lg max-w-md">Du hast 3 begonnene Module. Mach dort weiter, wo du aufgehört hast.</p>
+                </div>
+                <button class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-white/10 flex items-center gap-2">
+                    Zu meinen Modulen <span>➜</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-2xl font-bold text-slate-800">Alle Module</h3>
+            <div class="flex gap-2">
+                <button class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:border-blue-500 hover:text-blue-500 transition-colors">A-Z</button>
+            </div>
+        </div>
+
+        <div id="wbt-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+
+    </main>
+
+    <div id="app-footer"></div>
+
+    <script src="../assets/js/components.js"></script>
+    <script src="../assets/js/data-loader.js"></script>
+    <script src="../assets/js/page-explore.js"></script>
+</body>
+</html>

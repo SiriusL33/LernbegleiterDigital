@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Themenwelt | Loading...</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        theme: 'var(--theme-color)',
+                        'theme-light': 'var(--theme-light)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .tool-btn { transition: all 0.2s ease; }
+        .tool-btn:hover { transform: scale(1.1) translateX(-2px); }
+        /* Smooth progress bar transition */
+        .progress-fill { transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col selection:bg-theme-light selection:text-theme">
+
+    <div id="app-header"></div>
+
+    <div class="fixed right-6 top-24 z-50 flex flex-col gap-3 items-end">
+        
+        <button onclick="toggleLike(this)" class="tool-btn w-12 h-12 rounded-full shadow-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:shadow-pink-200/50 bg-white/90 backdrop-blur" title="Merken">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </button>
+        
+        <button onclick="shareWBT()" class="tool-btn w-12 h-12 rounded-full shadow-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:shadow-blue-200/50 bg-white/90 backdrop-blur" title="Kurs empfehlen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+        
+        <button onclick="generatePDF()" class="tool-btn w-12 h-12 rounded-full shadow-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:text-red-500 hover:shadow-red-200/50 bg-white/90 backdrop-blur" title="Als PDF speichern">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+        </button>
+        
+        <div class="relative group">
+            <div id="qr-panel" class="absolute right-14 top-0 w-72 bg-white p-6 rounded-2xl shadow-2xl border border-slate-100 flex flex-col items-center gap-4 transition-all duration-300 transform scale-0 opacity-0 origin-top-right z-50">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">QR-Code anzeigen</span>
+                
+                <div id="qr-placeholder" class="w-56 h-56 bg-slate-50 rounded-xl flex items-center justify-center shadow-inner">
+                    </div>
+                
+                <p class="text-[11px] text-slate-400 text-center leading-tight max-w-[200px]">
+                    Öffne das Modul direkt auf deinem Smartphone oder Tablet.
+                </p>
+                <div id="qr-timer" class="w-full bg-slate-100 h-1 mt-1 rounded-full overflow-hidden opacity-0">
+                    <div class="h-full bg-blue-500 w-full transition-transform duration-[5000ms] origin-left"></div>
+                </div>
+            </div>
+
+            <button onclick="toggleQR()" id="btn-qr" class="tool-btn w-12 h-12 rounded-full shadow-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-50 bg-white/90 backdrop-blur" title="Auf Smartphone öffnen">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <main class="flex-grow pt-32 pb-20 container mx-auto px-4 max-w-6xl">
+        <div id="loading" class="text-center py-20 animate-pulse text-slate-400">Lade Informationen zum Trainingsmodul...</div>
+
+        <div id="content" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-10 animate-fade-in">
+            
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                <div class="relative w-full aspect-video bg-slate-200 rounded-3xl overflow-hidden shadow-2xl ring-4 ring-white/50">
+                    <img id="wbt-image" src="" alt="Cover" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 flex gap-3">
+                        <span id="wbt-format" class="bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1 rounded-lg text-sm font-semibold">...</span>
+                        <span id="wbt-duration" class="bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-lg text-sm flex items-center gap-2">...</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <span class="w-2 h-8 bg-theme rounded-full"></span>Über dieses Modul
+                    </h2>
+                    <p id="wbt-desc" class="text-slate-600 leading-relaxed text-lg"></p>
+                    <div id="wbt-tags" class="mt-6 flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 flex flex-col gap-6 pt-4">
+                <div>
+                    <h4 class="text-theme font-bold uppercase tracking-widest text-sm mb-2">Digitales Trainingsmodul</h4>
+                    <h1 id="wbt-title" class="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-3"></h1>
+                    <p id="wbt-subtitle" class="text-xl text-slate-500 font-medium"></p>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-theme opacity-20 rounded-full blur-3xl -mr-10 -mt-10 group-hover:opacity-40 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-slate-400 text-xs uppercase font-bold tracking-wider">Dein aktuelles Modul</p>
+                                <div class="text-3xl font-bold mt-1 flex items-center gap-2">
+                                    +<span id="wbt-xp-display">0</span> Fortschritt
+                                    <span class="text-xs font-normal text-slate-500 ml-1">(nach Prüfung)</span>
+                                </div>
+                            </div>
+                            <div class="bg-white/10 p-2 rounded-lg">★</div>
+                        </div>
+                        <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+                            <div class="bg-theme h-full w-0 progress-fill" id="xp-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="exam-card" onclick="runExamSimulation()" class="hidden bg-white border border-slate-200 rounded-2xl p-5 shadow-sm items-center justify-between gap-4 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all group/exam relative overflow-hidden">
+                    <div id="exam-progress" class="absolute bottom-0 left-0 h-1 bg-blue-500 w-0 transition-all duration-[2000ms] ease-linear"></div>
+
+                    <div class="flex items-center gap-4 z-10">
+                        <div id="exam-icon" class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-colors">?</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 leading-tight">Prüfung starten</h4>
+                            <p id="exam-text" class="text-xs text-slate-500">Klicken zum Starten</p>
+                        </div>
+                    </div>
+                    <div id="exam-arrow" class="text-slate-300 group-hover/exam:text-blue-500 transition-colors z-10">➜</div>
+                </div>
+
+                <div class="mt-auto flex gap-3">
+                    <a id="btn-start" href="#" target="_blank" class="flex-grow btn-interactive bg-theme hover:bg-theme-light text-white text-xl font-bold py-5 px-8 rounded-2xl shadow-xl shadow-theme/30 flex items-center justify-between group">
+                        <span>Jetzt starten</span>
+                        <div class="bg-white/20 p-2 rounded-full group-hover:translate-x-1 transition-transform">➜</div>
+                    </a>
+
+                    <button onclick="alert('Feedback-Funktion öffnet sich...')" class="w-20 rounded-2xl border border-slate-200 bg-white text-slate-400 hover:text-blue-600 hover:border-blue-200 flex items-center justify-center shadow-sm transition-all" title="Feedback geben">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="app-footer"></div>
+
+    <script src="../assets/js/components.js"></script>
+    <script src="../assets/js/data-loader.js"></script>
+    <script src="../assets/js/page-detail.js"></script>
+</body>
+</html>
