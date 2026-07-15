@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klartext Medizin | Startseite</title>
-    
+    <title>Lernbegleiter Digital | Startseite</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -15,82 +15,62 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        'ctp-blue': 'var(--ctp-blue)',
-                        'ctp-pink': 'var(--ctp-pink)',
-                        'ctp-text': 'var(--ctp-text)',
+                        'lb-emerald': '#2f9d82',
+                        'lb-sage': '#9fbf9a',
+                        'lb-beige': '#f5efe6',
+                        'lb-text': 'var(--lb-text)'
                     }
                 }
             }
         }
     </script>
-    
-    <script 
-        src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js">
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 </head>
-<body class="flex flex-col min-h-screen selection:bg-pink-200 selection:text-pink-900">
+<body class="flex flex-col min-h-screen bg-[color:var(--lb-base)] selection:bg-lb-sage selection:text-lb-emerald">
 
-    
-    
     <div id="app-header"></div>
-    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-blue-200/50 rounded-full blur-3xl opacity-60 animate-fade-in"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-pink-200/40 rounded-full blur-3xl opacity-60 animate-fade-in delay-200"></div>
+
+    <header class="relative pt-28 pb-16 overflow-hidden">
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute top-8 left-8 w-72 h-72 bg-[rgba(47,157,130,0.12)] rounded-2xl blur-3xl opacity-70"></div>
+            <div class="absolute bottom-8 right-8 w-96 h-96 bg-[rgba(159,191,154,0.08)] rounded-2xl blur-3xl opacity-60"></div>
         </div>
 
         <div class="container mx-auto px-4 text-center max-w-4xl">
-            
-            <button id="btn-catalog" onclick="generateFullCatalog()" class="inline-flex items-center gap-2 py-3 px-6 rounded-full bg-gradient-to-r from-amber-200 to-amber-400 border border-amber-300 text-amber-900 text-sm font-bold tracking-wide mb-8 animate-fade-in hover:scale-105 hover:shadow-lg hover:shadow-amber-200/50 transition-all duration-300 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                GESAMTEN MODUL-KATALOG 2026 HERUNTERLADEN (PDF)
-            </button>
+            <div class="mb-8">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-800 tracking-tight mb-6">
+                    Lernbegleiter Digital
+                </h1>
+                <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                    Dein persönlicher Begleiter für digitales Lernen — warm, klar und auf den Punkt.
+                </p>
+            </div>
 
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-800 tracking-tight mb-6 animate-fade-in delay-100">
-                Digitalmedizin <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-400">leicht gemacht.</span>
-            </h1>
-            <p class="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in delay-200">
-                Der interaktive Begleiter für dein alle Fälle. Entdecke digitale Informations- und Lernmodule, nimm an Tests teil und werde zum Experten für die digitale Praxis. Verfolge deinen Fortschritt und lass dir deine Mühen zertifizieren, wenn du bewiesen hast, dass du es drauf hast!
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in delay-300">
-                
-                <a href="pages/explore.html" class="btn-interactive bg-slate-800 text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center gap-2 group shadow-xl shadow-slate-200 dark:shadow-black/50 dark:bg-blue-600">
-                    Jetzt erkunden
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button id="hero-primary" class="inline-flex items-center gap-3 py-4 px-8 rounded-2xl bg-gradient-to-r from-lb-emerald to-lb-sage text-white font-semibold shadow-2xl hover:scale-[1.01] transition-transform">
+                    Loslegen
+                </button>
+
+                <a href="#featured" id="hero-secondary" class="inline-flex items-center gap-3 py-3 px-6 rounded-full bg-white text-lb-emerald font-medium shadow-md border border-white">
+                    Mehr erfahren
                 </a>
-
-                <a href="#featured" id="btn-party" class="group relative bg-white text-slate-600 font-medium px-8 py-4 rounded-full flex items-center gap-3 shadow-md border border-white hover:border-slate-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                    Im Fokus
-                    <span class="text-xl group-hover:rotate-12 group-hover:scale-125 transition-transform duration-300 origin-bottom-left">🎉</span>
-                </a>
-
-            </div>        
+            </div>
         </div>
     </header>
 
-   
-    <section id="featured" class="py-20 bg-white/50 border-t border-slate-100 flex-grow">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-end mb-10">
-                <div>
-                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Diesen Monat im Fokus:</h2>
-                    <p class="text-slate-500">Die beliebtesten Module der Community in den letzten 30 Tage.</p>
+    <main class="flex-grow">
+        <section id="featured" class="py-20">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Im Fokus</h2>
+                    <p class="text-slate-500 max-w-xl mx-auto">Ausgewählte Inhalte und Impulse für dein digitales Lernen.</p>
                 </div>
-                <a href="pages/explore.html" class="hidden md:flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                    Alle anzeigen <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                </a>
-            </div>
 
-            <div id="featured-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="col-span-full text-center py-20 text-slate-400 animate-pulse">Lade Inhalte...</div>
+                <div id="featured-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="col-span-full text-center py-20 text-slate-400">Lade Inhalte...</div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <div id="app-footer"></div>
 
@@ -98,12 +78,13 @@
     <script src="assets/js/data-loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            await WBTApp.loadData();
-            const featuredItems = WBTApp.getFeatured().slice(0, 3);
+            // UI lädt zentrale Daten, Backend-Endpunkt bleibt unverändert
+            await LBApp.loadData();
+            const featuredItems = LBApp.getFeatured().slice(0, 3);
             const container = document.getElementById('featured-container');
-            
+
             if (featuredItems.length > 0) {
-                container.innerHTML = featuredItems.map(wbt => WBTApp.renderCard(wbt)).join('');
+                container.innerHTML = featuredItems.map(item => LBApp.renderCard(item)).join('');
                 container.querySelectorAll('.group').forEach((card, index) => {
                     card.classList.add('animate-fade-in');
                     card.style.animationDelay = `${index * 150}ms`;
@@ -113,36 +94,29 @@
             }
         });
     </script>
-	<script>
-    // --- PARTY LOGIK ---
-    const btnParty = document.getElementById('btn-party');
-    
+
+    <script>
+    // sanfte Interaktion: confetti bei hover bleibt, Palette angepasst
+    const btnParty = document.getElementById('hero-secondary');
     if(btnParty) {
         btnParty.addEventListener('mouseenter', (e) => {
-            // Wo ist der Button?
             const rect = btnParty.getBoundingClientRect();
-            
-            // Berechne die Position relativ zum Viewport (0 bis 1)
             const x = (rect.left + rect.width / 2) / window.innerWidth;
             const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-            // FEUER FREI!
-            confetti({
-                particleCount: 60,       // Menge
-                spread: 70,              // Streuung
-                origin: { x: x, y: y },  // Startpunkt (Button-Mitte)
-                colors: ['#1e66f5', '#ea76cb', '#df8e1d', '#40a02b'], // Unsere Catppuccin Farben!
-                disableForReducedMotion: true,
-                startVelocity: 30,
-                gravity: 0.8,
-                scalar: 0.8, // Größe der Schnipsel
-                ticks: 100   // Dauer
-            });
+            if (window.confetti) {
+                confetti({
+                    particleCount: 40,
+                    spread: 50,
+                    origin: { x: x, y: y },
+                    colors: ['#2f9d82', '#9fbf9a', '#f5efe6'],
+                    disableForReducedMotion: true,
+                    scalar: 0.8
+                });
+            }
         });
     }
-</script>
+    </script>
 
     <script src="assets/js/catalog.js"></script>
-
 </body>
 </html>
