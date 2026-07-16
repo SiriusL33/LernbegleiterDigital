@@ -22,3 +22,41 @@ Die folgenden Umgebungsvariablen steuern Session-, CSRF- und Auth-Sicherheit:
 1. Ohne `SESSION_SECRET` startet der Server nicht.
 2. Für mutierende Auth-Endpoints (`/api/login`, `/api/register`, `/api/logout`) muss ein passender CSRF-Header `x-csrf-token` gesendet werden.
 3. Beim Logout wird die Session serverseitig zerstört und der Cookie mit denselben Sicherheits-Flags gelöscht.
+
+## Zeitlich begrenzte Entwicklungsvorschau
+
+Der optionale Vorschauzugang liegt vollständig in `middleware/developmentAccess.js` und dem direkt markierten Block in `server.js`. Er zeigt zuerst eine Rechenaufgabe und löst danach den nativen HTTP-Basic-Auth-Dialog des Browsers aus.
+
+### Lokale Konfiguration
+
+1. `.env.example` als `.env` kopieren. `.env` ist durch `.gitignore` ausgeschlossen.
+2. `DEV_ACCESS_ENABLED=true` setzen.
+3. Benutzername und Passwort getrennt mit Argon2id hashen; nur die Hashes in `.env` ablegen:
+
+   ```bash
+   node -e "require('argon2').hash(process.argv[1],{type:require('argon2').argon2id}).then(console.log)" 'WERT_HIER_EINGEBEN'
+   ```
+
+4. Die Resultate als `DEV_ACCESS_USERNAME_HASH` und `DEV_ACCESS_PASSWORD_HASH` eintragen.
+5. Anwendung neu starten. Ein laufender Node-Prozess übernimmt Änderungen an `.env` nicht automatisch.
+
+Hashes verhindern Klartext-Zugangsdaten im Repository. Sie ersetzen weder TLS noch starke, individuelle Passwörter. Dieser Zugang ist nur für eine kurzfristige Entwicklungsvorschau vorgesehen.
+
+### Eigener Cloudflare Tunnel
+
+Im Cloudflare-Dashboard unter **Zero Trust → Networks → Tunnels** einen benannten Tunnel anlegen, die eigene Subdomain als Public Hostname konfigurieren und als Service `http://localhost:3000` setzen. Auf dem Server anschließend den angezeigten Connector starten:
+
+```bash
+cloudflared tunnel run --token "$CLOUDFLARE_TUNNEL_TOKEN"
+```
+
+`CLOUDFLARE_TUNNEL_TOKEN` ausschließlich im Secret Store oder in der geschützten Service-Umgebung des Servers ablegen. Der Express-Port muss nicht öffentlich in der Firewall geöffnet werden; `cloudflared` baut die Verbindung ausgehend auf.
+
+### Vollständige Entfernung nach der Vorschau
+
+1. `DEV_ACCESS_ENABLED=false` setzen.
+2. Den markierten Entwicklungszugangsblock aus `server.js` entfernen.
+3. `middleware/developmentAccess.js` löschen.
+4. `DEV_ACCESS_*` aus der Serverumgebung entfernen und den Cloudflare Tunnel deaktivieren.
+
+Die reguläre Anwendung bleibt davon unberührt.

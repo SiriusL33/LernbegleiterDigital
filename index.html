@@ -1,122 +1,499 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lernbegleiter Digital | Startseite</title>
+    <meta name="description" content="SonoABCD – visuelle Simulation für Notfall-Echokardiografie">
+    <title>SonoABCD | Notfall-Echokardiografie sicher trainieren</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif']
+                    },
                     colors: {
-                        'lb-emerald': '#2f9d82',
-                        'lb-sage': '#9fbf9a',
-                        'lb-beige': '#f5efe6',
-                        'lb-text': 'var(--lb-text)'
+                        clinical: {
+                            400: '#38d7d2',
+                            500: '#16b8b2',
+                            600: '#0e938f'
+                        }
+                    },
+                    boxShadow: {
+                        panel: '0 24px 65px -30px rgba(0, 0, 0, 0.65)'
                     }
                 }
             }
-        }
+        };
     </script>
+    <style>
+        :root {
+            --care-bg: #edf6f4;
+            --care-surface: rgba(255, 255, 255, .92);
+            --care-border: #d6e8e4;
+            --care-ink: #173a3b;
+            --care-muted: #66807f;
+            --care-teal: #087f78;
+            color-scheme: light;
+        }
+        body { background: var(--care-bg); }
+        .medical-grid {
+            background-image: radial-gradient(circle at 15% 12%, rgba(22, 184, 178, .10), transparent 26%), radial-gradient(circle at 90% 35%, rgba(59, 130, 246, .06), transparent 24%);
+        }
+        .scan-lines {
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0, rgba(255,255,255,.018) 1px, transparent 1px, transparent 4px);
+        }
+        .progress-glow { box-shadow: 0 0 16px rgba(56, 215, 210, .42); }
+        .donut {
+            background: conic-gradient(#38d7d2 0 74%, #3b82f6 74% 89%, #1e293b 89% 100%);
+        }
+        .question-card:has(input:checked) {
+            border-color: rgba(56, 215, 210, .55);
+            background-color: rgba(15, 118, 110, .08);
+        }
+        input[type="radio"] { accent-color: #38d7d2; }
+        .care-header { background: rgba(250, 253, 252, .9) !important; border-color: var(--care-border) !important; }
+        .care-panel { background: var(--care-surface) !important; border-color: var(--care-border) !important; box-shadow: 0 18px 45px -30px rgba(19, 77, 75, .35) !important; }
+        .care-soft { background: rgba(243, 249, 247, .9) !important; border-color: var(--care-border) !important; }
+        .care-panel h2, .care-panel strong, .care-ink { color: var(--care-ink) !important; }
+        .care-panel p, .care-muted { color: var(--care-muted) !important; }
+        .question-card { background: #f8fbfa !important; border-color: #dceae7 !important; color: #355655; }
+        .question-card:hover { border-color: #8fc9c3 !important; background: #fff !important; }
+        .question-card:has(input:checked) { border-color: #27a79f !important; background: #e8f7f4 !important; color: #165c58; box-shadow: 0 0 0 3px rgba(39,167,159,.08); }
+        .care-kicker { color: #087f78 !important; }
+        .care-divider { border-color: #deebe8 !important; }
+        .focus-ring:focus-visible { outline: 3px solid rgba(22,184,178,.3); outline-offset: 3px; }
+        .toast-enter { animation: toast-in .28s ease-out both; }
+        .theme-toggle-thumb { transform: translateX(0); }
+        .theme-toggle[aria-pressed="true"] .theme-toggle-thumb { transform: translateX(1.25rem); }
+        .theme-toggle[aria-pressed="true"] .theme-toggle-track { background: #16b8b2; border-color: #38d7d2; }
+        .modal-enter { animation: modal-in .22s ease-out both; }
+        .bar-fill { transform-origin: left; animation: bar-grow .65s ease-out both; }
+        @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+        @keyframes bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        html[data-theme="exam"] {
+            --care-bg: #071011;
+            --care-surface: rgba(13, 27, 29, .96);
+            --care-border: #263b3d;
+            --care-ink: #e6f4f2;
+            --care-muted: #93aaa8;
+            --care-teal: #38d7d2;
+            color-scheme: dark;
+        }
+        html[data-theme="exam"] .care-header { background: rgba(7, 16, 17, .92) !important; }
+        html[data-theme="exam"] .care-soft { background: rgba(18, 36, 38, .9) !important; }
+        html[data-theme="exam"] .question-card { background: #0d1b1d !important; border-color: #263b3d !important; color: #c3d5d3; }
+        html[data-theme="exam"] .question-card:hover { background: #122426 !important; border-color: #3f6664 !important; }
+        html[data-theme="exam"] .question-card:has(input:checked) { background: #10302e !important; border-color: #38d7d2 !important; color: #e6fffc; }
+        html[data-theme="exam"] .care-kicker { color: #38d7d2 !important; }
+        html[data-theme="exam"] .care-divider { border-color: #263b3d !important; }
+        html[data-theme="exam"] body { color: #a9bcba; }
+        html[data-theme="exam"] .medical-grid { background-image: radial-gradient(circle at 15% 12%, rgba(22,184,178,.07), transparent 26%), radial-gradient(circle at 90% 35%, rgba(59,130,246,.04), transparent 24%); }
+        html[data-theme="exam"] .theme-sensitive-button { background: #102426 !important; border-color: #31504f !important; color: #d8e9e7 !important; }
+        html[data-theme="exam"] .theme-sensitive-button:hover { background: #173130 !important; }
+        html[data-theme="exam"] footer { border-color: #263b3d !important; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
 </head>
-<body class="flex flex-col min-h-screen bg-[color:var(--lb-base)] selection:bg-lb-sage selection:text-lb-emerald">
+<body class="min-h-screen overflow-x-hidden font-sans text-slate-600 antialiased selection:bg-clinical-400 selection:text-slate-950">
+    <div class="pointer-events-none fixed inset-0 medical-grid" aria-hidden="true"></div>
+    <div class="pointer-events-none fixed -left-36 top-12 h-96 w-96 rounded-full bg-cyan-500/5 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none fixed right-0 top-1/3 h-80 w-80 rounded-full bg-blue-600/5 blur-3xl" aria-hidden="true"></div>
 
-    <div id="app-header"></div>
+    <header class="care-header relative z-20 border-b backdrop-blur-xl">
+        <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-10">
+            <a href="#" class="group flex min-w-0 items-center gap-3" aria-label="SonoABCD Startseite">
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-clinical-400/25 bg-clinical-400/10 text-clinical-400 shadow-lg shadow-cyan-950/30">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M3 12h4l2.2-6 4.2 12 2.3-6H21" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="min-w-0">
+                    <span class="block truncate font-display text-base font-extrabold tracking-tight text-[#173a3b] sm:text-lg">Sono<span class="text-clinical-600">ABCD</span></span>
+                    <span class="hidden text-[10px] font-semibold uppercase tracking-[.18em] text-slate-500 sm:block">Sicher entscheiden. Besser versorgen.</span>
+                </span>
+            </a>
 
-    <header class="relative pt-28 pb-16 overflow-hidden">
-        <div class="absolute inset-0 -z-10">
-            <div class="absolute top-8 left-8 w-72 h-72 bg-[rgba(47,157,130,0.12)] rounded-2xl blur-3xl opacity-70"></div>
-            <div class="absolute bottom-8 right-8 w-96 h-96 bg-[rgba(159,191,154,0.08)] rounded-2xl blur-3xl opacity-60"></div>
-        </div>
-
-        <div class="container mx-auto px-4 text-center max-w-4xl">
-            <div class="mb-8">
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-800 tracking-tight mb-6">
-                    Lernbegleiter Digital
-                </h1>
-                <p class="text-xl text-slate-600 mb-8 leading-relaxed">
-                    Dein persönlicher Begleiter für digitales Lernen — warm, klar und auf den Punkt.
-                </p>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button id="hero-primary" class="inline-flex items-center gap-3 py-4 px-8 rounded-2xl bg-gradient-to-r from-lb-emerald to-lb-sage text-white font-semibold shadow-2xl hover:scale-[1.01] transition-transform">
-                    Loslegen
+            <div class="flex items-center gap-3 sm:gap-5">
+                <button id="theme-toggle" type="button" class="theme-toggle focus-ring flex items-center gap-2 rounded-xl border border-teal-800/15 bg-white/70 px-2.5 py-2 text-xs font-bold text-[#173a3b] shadow-sm transition hover:border-teal-500/40" aria-pressed="false" aria-label="Untersuchungsmodus aktivieren" title="Dunkle, blendungsarme Ansicht für Ultraschallbefundung">
+                    <span class="hidden sm:inline" id="theme-label">Untersuchungsmodus</span>
+                    <span class="theme-toggle-track relative h-5 w-10 rounded-full border border-slate-300 bg-slate-200 transition" aria-hidden="true"><span class="theme-toggle-thumb absolute left-0.5 top-0.5 h-3.5 w-3.5 rounded-full bg-white shadow transition-transform"></span></span>
                 </button>
-
-                <a href="#featured" id="hero-secondary" class="inline-flex items-center gap-3 py-3 px-6 rounded-full bg-white text-lb-emerald font-medium shadow-md border border-white">
-                    Mehr erfahren
-                </a>
+                <div class="hidden text-right sm:block">
+                    <p class="text-sm font-medium text-[#173a3b]">Hallo, Dr. Weber</p>
+                    <p class="text-xs text-slate-500">Notfallmedizin</p>
+                </div>
+                <span class="hidden items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-400 md:inline-flex">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+                    EFN verifiziert
+                </span>
+                <div class="relative">
+                    <button id="profile-button" type="button" class="focus-ring grid h-10 w-10 place-items-center rounded-full border border-teal-700/15 bg-teal-700 text-sm font-bold text-white shadow-sm transition hover:bg-teal-800" aria-label="Profil öffnen" aria-expanded="false" aria-controls="profile-menu">DW</button>
+                    <div id="profile-menu" class="care-panel absolute right-0 top-12 hidden w-64 rounded-2xl border p-4 shadow-xl" role="dialog" aria-label="Profilmenü">
+                        <p class="text-sm font-bold care-ink">Dr. Daniela Weber</p><p class="mt-0.5 text-xs">Notfallmedizin · EFN verifiziert</p>
+                        <div class="care-divider my-3 border-t"></div>
+                        <button type="button" data-toast="Profileinstellungen sind für die nächste Version vorgemerkt." class="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-teal-800 transition hover:bg-teal-50">Profileinstellungen</button>
+                        <a href="login.html" class="mt-1 block rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Abmelden</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow">
-        <section id="featured" class="py-20">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Im Fokus</h2>
-                    <p class="text-slate-500 max-w-xl mx-auto">Ausgewählte Inhalte und Impulse für dein digitales Lernen.</p>
+    <main class="relative z-10 mx-auto max-w-[1600px] px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+        <div class="mb-7 flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
+            <div>
+                <div class="care-kicker mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em]">
+                    <span>Simulation 04</span><span class="text-slate-700">/</span><span class="text-slate-500">Focused Cardiac Ultrasound</span>
+                </div>
+                <h1 class="font-display text-2xl font-extrabold tracking-tight text-[#173a3b] sm:text-3xl">Notfall-Echokardiografie</h1>
+                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Trainieren Sie die Befundung in der parasternalen langen Achse und treffen Sie eine sichere klinische Entscheidung.</p>
+            </div>
+            <div class="care-soft flex items-center gap-3 self-start rounded-xl border px-4 py-2.5 text-xs text-slate-600 xl:self-auto">
+                <svg class="h-4 w-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>
+                Ø Bearbeitungszeit <strong class="font-semibold text-slate-200">08:30 min</strong>
+            </div>
+        </div>
+
+        <div class="grid items-start gap-7 xl:grid-cols-[minmax(0,1fr)_350px]">
+            <section class="min-w-0 space-y-7" aria-label="Simulationsbereich">
+                    <article class="care-panel overflow-hidden rounded-2xl border shadow-panel">
+                    <div class="flex items-center justify-between border-b border-slate-800 px-5 py-3.5">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-slate-300"><span class="h-2 w-2 animate-pulse rounded-full bg-red-400"></span>Echo Loop</span>
+                            <span class="rounded-md bg-slate-800 px-2 py-1 font-mono text-[10px] text-slate-500">PLAX · 2D</span>
+                        </div>
+                        <div class="flex gap-4 font-mono text-[10px] text-slate-500"><span>70 BPM</span><span class="hidden sm:inline">12.0 CM</span></div>
+                    </div>
+
+                    <button id="video-placeholder" type="button" class="group relative block aspect-video w-full overflow-hidden bg-black text-left" aria-label="Echokardiografie-Clip starten">
+                        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(148,163,184,.16),transparent_54%)]"></div>
+                        <div class="scan-lines absolute inset-0 opacity-70"></div>
+                        <svg class="absolute left-1/2 top-[9%] h-[80%] w-[76%] -translate-x-1/2 text-slate-600/20" viewBox="0 0 500 340" fill="currentColor" aria-hidden="true">
+                            <path d="M250 0C145 53 67 166 24 322h452C433 166 355 53 250 0Zm0 28c82 48 146 143 187 270H63C104 171 168 76 250 28Z"/>
+                            <ellipse cx="250" cy="185" rx="72" ry="38" fill="rgba(226,232,240,.08)" transform="rotate(-16 250 185)"/>
+                        </svg>
+                        <div class="absolute left-4 top-4 font-mono text-[10px] leading-5 text-slate-500 sm:left-6 sm:top-6"><span class="text-slate-300">SONO ABCD</span><br>MI 0.8&nbsp;&nbsp;TIS 0.2<br>G 58&nbsp;&nbsp;FR 46</div>
+                        <div class="absolute right-4 top-4 text-right font-mono text-[10px] leading-5 text-slate-500 sm:right-6 sm:top-6">Dr. Weber<br>16 JUL 2026</div>
+                        <div class="absolute inset-0 grid place-items-center">
+                            <span class="flex flex-col items-center gap-3">
+                                <span class="grid h-16 w-16 place-items-center rounded-full border border-white/20 bg-slate-900/65 text-white shadow-2xl backdrop-blur-md transition duration-300 group-hover:scale-105 group-hover:border-clinical-400/60 group-hover:bg-clinical-500 group-hover:text-slate-950">
+                                    <svg class="ml-1 h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                                <span id="video-label" class="text-xs font-bold uppercase tracking-[.18em] text-slate-300">Clip starten</span>
+                            </span>
+                        </div>
+                        <div class="absolute inset-x-5 bottom-4 flex items-center gap-3 sm:inset-x-7 sm:bottom-6">
+                            <span class="font-mono text-[10px] text-slate-500">00:00</span>
+                            <span class="h-1 flex-1 overflow-hidden rounded-full bg-slate-700/80"><span class="block h-full w-0 rounded-full bg-clinical-400 transition-all duration-[5000ms]" id="video-progress"></span></span>
+                            <span class="font-mono text-[10px] text-slate-500">00:05</span>
+                        </div>
+                    </button>
+                </article>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <button type="button" data-reference="Anatomische Orientierung" class="care-panel group flex min-h-32 items-center gap-4 rounded-2xl border p-4 text-left shadow-lg transition hover:-translate-y-0.5 hover:border-teal-300">
+                        <div class="relative grid h-24 w-28 shrink-0 place-items-center overflow-hidden rounded-xl border border-slate-700 bg-black">
+                            <div class="absolute inset-0 scan-lines"></div>
+                            <svg class="h-14 w-14 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="m4 19 5-6 3 3 3-5 5 8H4Z"/><circle cx="9" cy="7" r="2"/></svg>
+                        </div>
+                        <div><span class="text-[10px] font-bold uppercase tracking-[.16em] text-teal-700">Referenz 01</span><h2 class="mt-1 text-sm font-bold">Anatomische Orientierung</h2><p class="mt-1 text-xs leading-5">LV · LA · Aortenwurzel</p></div>
+                    </button>
+                    <button type="button" data-reference="Norm- & Grenzwerte" class="care-panel group flex min-h-32 items-center gap-4 rounded-2xl border p-4 text-left shadow-lg transition hover:-translate-y-0.5 hover:border-teal-300">
+                        <div class="relative grid h-24 w-28 shrink-0 place-items-center overflow-hidden rounded-xl border border-slate-700 bg-black">
+                            <div class="absolute inset-0 scan-lines"></div>
+                            <svg class="h-14 w-14 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M4 18V6m0 6h4l2-5 3.5 10 2-5H20" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div><span class="text-[10px] font-bold uppercase tracking-[.16em] text-teal-700">Referenz 02</span><h2 class="mt-1 text-sm font-bold">Norm- & Grenzwerte</h2><p class="mt-1 text-xs leading-5">EF · TAPSE · VCI</p></div>
+                    </button>
                 </div>
 
-                <div id="featured-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="col-span-full text-center py-20 text-slate-400">Lade Inhalte...</div>
-                </div>
-            </div>
-        </section>
+                <section id="assessment" class="care-panel rounded-2xl border p-5 shadow-panel transition-all duration-500 sm:p-7" aria-labelledby="assessment-title">
+                    <div class="care-divider mb-7 flex items-start justify-between gap-5 border-b pb-5">
+                        <div>
+                            <p class="care-kicker mb-2 text-[10px] font-bold uppercase tracking-[.18em]">Klinische Einschätzung</p>
+                            <h2 id="assessment-title" class="font-display text-xl font-bold">Befund &amp; Entscheidung</h2>
+                            <p class="mt-2 text-sm">Wählen Sie jeweils die wahrscheinlichste Antwort.</p>
+                        </div>
+                        <span class="shrink-0 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-xs text-slate-400">3 Fragen</span>
+                    </div>
+
+                    <form id="quiz-form" class="space-y-7">
+                        <fieldset>
+                            <legend class="mb-3 text-sm font-semibold text-slate-200"><span class="mr-2 text-clinical-400">01</span>Wie beurteilen Sie die linksventrikuläre Pumpfunktion?</legend>
+                            <div class="grid gap-2 md:grid-cols-3">
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q1" value="normal" class="h-4 w-4 shrink-0"><span class="text-sm">Normale EF (&gt; 55 %)</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q1" value="reduced" class="h-4 w-4 shrink-0"><span class="text-sm">Mittelgradig reduziert</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q1" value="hyperdynamic" class="h-4 w-4 shrink-0"><span class="text-sm">Hyperdynam</span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="mb-3 text-sm font-semibold text-slate-200"><span class="mr-2 text-clinical-400">02</span>Welcher Begleitbefund ist im Clip erkennbar?</legend>
+                            <div class="grid gap-2 md:grid-cols-3">
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q2" value="effusion" class="h-4 w-4 shrink-0"><span class="text-sm">Perikarderguss</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q2" value="rv" class="h-4 w-4 shrink-0"><span class="text-sm">RV-Dilatation</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q2" value="none" class="h-4 w-4 shrink-0"><span class="text-sm">Kein Begleitbefund</span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="mb-3 text-sm font-semibold text-slate-200"><span class="mr-2 text-clinical-400">03</span>Welche klinische Maßnahme ist primär angezeigt?</legend>
+                            <div class="grid gap-2 md:grid-cols-3">
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q3" value="volume" class="h-4 w-4 shrink-0"><span class="text-sm">Volumengabe</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q3" value="cardiology" class="h-4 w-4 shrink-0"><span class="text-sm">Kardiologie alarmieren</span></label>
+                                <label class="question-card flex cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/35 p-3.5 transition hover:border-slate-700"><input type="radio" name="q3" value="reassess" class="h-4 w-4 shrink-0"><span class="text-sm">Verlaufskontrolle</span></label>
+                            </div>
+                        </fieldset>
+
+                        <div class="care-divider flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row">
+                            <p class="flex items-center gap-2 text-xs text-slate-500"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.8 3.2 8.4 7.5 10 4.3-1.6 7.5-5.2 7.5-10V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>Ihre Antworten werden als Simulation gespeichert.</p>
+                            <button id="complete-test" type="button" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-clinical-400 px-6 py-3.5 text-sm font-extrabold text-slate-950 shadow-lg shadow-cyan-950/40 transition hover:bg-cyan-300 focus:outline-none focus:ring-2 focus:ring-clinical-400 focus:ring-offset-2 focus:ring-offset-slate-900 sm:w-auto">
+                                Test abschließen
+                                <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+
+            <aside class="space-y-5 xl:sticky xl:top-7" aria-label="Lernfortschritt und Aktionen">
+                <section class="care-panel rounded-2xl border p-6 shadow-panel" aria-labelledby="progress-title">
+                    <div class="mb-7 flex items-center justify-between">
+                        <div><p class="text-[10px] font-bold uppercase tracking-[.2em] text-slate-500">Lernstatus</p><h2 id="progress-title" class="mt-1 font-display text-lg font-bold text-white">Kursfortschritt</h2></div>
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-clinical-400/10 text-clinical-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2" stroke-linecap="round"/></svg></span>
+                    </div>
+                    <div class="mb-3 flex items-end justify-between"><span id="progress-number" class="font-display text-4xl font-extrabold tracking-tight text-white">70<span class="text-lg text-slate-500">%</span></span><span id="progress-copy" class="pb-1 text-xs font-medium text-slate-400">abgeschlossen</span></div>
+                    <div class="h-2.5 overflow-hidden rounded-full bg-slate-950 ring-1 ring-slate-800" role="progressbar" aria-label="Kursfortschritt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="progress-track"><div id="progress-bar" class="progress-glow h-full w-[70%] rounded-full bg-gradient-to-r from-blue-500 to-clinical-400 transition-all duration-1000 ease-out"></div></div>
+                    <div class="mt-4 flex justify-between text-[11px] text-slate-500"><span>7 von 10 Modulen</span><span>3 verbleibend</span></div>
+
+                    <div id="passed-badge" class="mt-5 hidden translate-y-2 items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 opacity-0 transition-all duration-500" role="status">
+                        <span class="grid h-8 w-8 place-items-center rounded-full bg-emerald-400 text-slate-950"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        <span><strong class="block text-sm text-emerald-300">Modul bestanden</strong><small class="text-xs text-emerald-400/65">Fortschritt aktualisiert</small></span>
+                    </div>
+                </section>
+
+                <section class="care-panel rounded-2xl border p-5 shadow-lg" aria-labelledby="actions-title">
+                    <h2 id="actions-title" class="mb-4 text-xs font-bold uppercase tracking-[.18em] text-slate-500">Direkt weiterlernen</h2>
+                    <div class="space-y-2.5">
+                        <button id="continue-test" type="button" class="flex w-full items-center justify-between rounded-xl border border-teal-600/25 bg-teal-50 px-4 py-3.5 text-left text-sm font-bold text-teal-800 transition hover:border-teal-500 hover:bg-teal-100"><span class="flex items-center gap-3"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Letzten Test fortsetzen</span><span>→</span></button>
+                        <button id="new-simulation" type="button" class="theme-sensitive-button flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-left text-sm font-bold text-[#173a3b] transition hover:border-teal-300 hover:bg-teal-50"><span class="flex items-center gap-3"><svg class="h-4 w-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Neue Simulation starten</span><span class="text-slate-400">→</span></button>
+                    </div>
+                </section>
+
+                <section class="care-panel rounded-2xl border p-5 shadow-lg" aria-labelledby="stats-title">
+                    <div class="mb-5 flex items-center justify-between"><div><p class="text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">Performance</p><h2 id="stats-title" class="mt-1 font-display text-base font-bold text-white">Kompetenzprofil</h2></div><span class="text-xs font-medium text-slate-500">Letzte 30 Tage</span></div>
+                    <div class="flex items-center gap-6">
+                        <div class="donut relative h-28 w-28 shrink-0 rounded-full shadow-[0_0_30px_rgba(56,215,210,.09)]"><div class="absolute inset-[11px] grid place-items-center rounded-full bg-slate-900 text-center"><span><strong class="block font-display text-xl text-white">82</strong><small class="text-[9px] uppercase tracking-wider text-slate-500">Score</small></span></div></div>
+                        <div class="min-w-0 flex-1 space-y-3 text-xs">
+                            <div class="flex items-center justify-between gap-2"><span class="flex items-center gap-2 text-slate-400"><i class="h-2 w-2 rounded-full bg-clinical-400"></i>Befundung</span><strong class="text-slate-200">74%</strong></div>
+                            <div class="flex items-center justify-between gap-2"><span class="flex items-center gap-2 text-slate-400"><i class="h-2 w-2 rounded-full bg-blue-500"></i>Anatomie</span><strong class="text-slate-200">89%</strong></div>
+                            <div class="flex items-center justify-between gap-2"><span class="flex items-center gap-2 text-slate-400"><i class="h-2 w-2 rounded-full bg-slate-700"></i>Tempo</span><strong class="text-slate-200">68%</strong></div>
+                        </div>
+                    </div>
+                    <button id="open-statistics" type="button" class="mt-5 flex w-full items-center justify-between border-t border-slate-800 pt-4 text-left text-xs font-bold text-teal-700 transition hover:text-clinical-500" aria-haspopup="dialog" aria-controls="statistics-modal"><span>Detaillierte Statistik öffnen</span><span aria-hidden="true">↗</span></button>
+                </section>
+            </aside>
+        </div>
     </main>
 
-    <div id="app-footer"></div>
+    <footer class="relative z-10 mt-6 border-t border-slate-800/70 py-6">
+        <div class="mx-auto flex max-w-[1600px] flex-col justify-between gap-2 px-5 text-xs text-slate-600 sm:flex-row sm:px-8 lg:px-10"><span>© 2026 SonoABCD · Lernbegleiter Digital</span><span>Visuelle Trainingssimulation · Kein Medizinprodukt</span></div>
+    </footer>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/data-loader.js"></script>
+    <div id="reference-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-[#102f30]/45 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="reference-title">
+        <div class="care-panel w-full max-w-lg rounded-3xl border p-6 shadow-2xl sm:p-8">
+            <div class="flex items-start justify-between gap-5"><div><p class="care-kicker text-[10px] font-bold uppercase tracking-[.18em]">Klinische Referenz</p><h2 id="reference-title" class="mt-2 font-display text-xl font-bold">Referenz</h2></div><button id="close-reference" type="button" class="focus-ring grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200" aria-label="Referenz schließen">×</button></div>
+            <div id="reference-content" class="mt-6 rounded-2xl bg-teal-50 p-5 text-sm leading-7 text-slate-700"></div>
+            <p class="mt-4 text-xs text-slate-500">Kompakte Lernhilfe für die Simulation – keine klinische Handlungsanweisung.</p>
+        </div>
+    </div>
+    <div id="statistics-modal" class="fixed inset-0 z-50 hidden items-center justify-center overflow-y-auto bg-[#020707]/75 p-3 backdrop-blur-md sm:p-6" role="dialog" aria-modal="true" aria-labelledby="statistics-title" aria-describedby="statistics-description">
+        <div id="statistics-panel" class="care-panel my-auto w-full max-w-5xl rounded-3xl border p-5 shadow-2xl sm:p-8">
+            <div class="flex items-start justify-between gap-5">
+                <div><p class="care-kicker text-[10px] font-bold uppercase tracking-[.2em]">Persönliche Lernanalyse · 30 Tage</p><h2 id="statistics-title" class="mt-2 font-display text-2xl font-extrabold">Detaillierte Statistik</h2><p id="statistics-description" class="mt-2 text-sm">Ihre Entwicklung aus 24 abgeschlossenen Simulationen.</p></div>
+                <button id="close-statistics" type="button" class="focus-ring grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-300/30 bg-slate-500/10 text-xl care-ink hover:bg-slate-500/20" aria-label="Statistik schließen">×</button>
+            </div>
+            <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="care-soft rounded-2xl border p-4"><span class="text-[10px] font-bold uppercase tracking-wider care-muted">Gesamtscore</span><strong class="mt-2 block font-display text-3xl care-ink">82<span class="text-base text-emerald-500"> +6</span></strong><small class="care-muted">gegenüber Vormonat</small></div>
+                <div class="care-soft rounded-2xl border p-4"><span class="text-[10px] font-bold uppercase tracking-wider care-muted">Simulationen</span><strong class="mt-2 block font-display text-3xl care-ink">24</strong><small class="care-muted">21 erfolgreich beendet</small></div>
+                <div class="care-soft rounded-2xl border p-4"><span class="text-[10px] font-bold uppercase tracking-wider care-muted">Trefferquote</span><strong class="mt-2 block font-display text-3xl care-ink">87%</strong><small class="care-muted">63 von 72 Antworten</small></div>
+                <div class="care-soft rounded-2xl border p-4"><span class="text-[10px] font-bold uppercase tracking-wider care-muted">Ø Zeit</span><strong class="mt-2 block font-display text-3xl care-ink">08:30</strong><small class="care-muted">− 48 Sek. verbessert</small></div>
+            </div>
+            <div class="mt-5 grid gap-5 lg:grid-cols-[1.3fr_.7fr]">
+                <section class="care-soft rounded-2xl border p-5" aria-labelledby="competency-heading">
+                    <div class="flex items-end justify-between"><div><h3 id="competency-heading" class="font-display text-base font-bold care-ink">Kompetenzentwicklung</h3><p class="mt-1 text-xs care-muted">Score nach Fachbereich</p></div><span class="text-xs font-bold text-emerald-500">↑ positiver Trend</span></div>
+                    <div class="mt-6 space-y-5">
+                        <div><div class="mb-2 flex justify-between text-xs"><span class="font-semibold care-ink">Anatomische Orientierung</span><strong class="care-ink">89%</strong></div><div class="h-2.5 rounded-full bg-slate-500/15"><div class="bar-fill h-full w-[89%] rounded-full bg-blue-500"></div></div></div>
+                        <div><div class="mb-2 flex justify-between text-xs"><span class="font-semibold care-ink">Klinische Befundung</span><strong class="care-ink">74%</strong></div><div class="h-2.5 rounded-full bg-slate-500/15"><div class="bar-fill h-full w-[74%] rounded-full bg-clinical-400"></div></div></div>
+                        <div><div class="mb-2 flex justify-between text-xs"><span class="font-semibold care-ink">Therapieentscheidung</span><strong class="care-ink">81%</strong></div><div class="h-2.5 rounded-full bg-slate-500/15"><div class="bar-fill h-full w-[81%] rounded-full bg-emerald-500"></div></div></div>
+                        <div><div class="mb-2 flex justify-between text-xs"><span class="font-semibold care-ink">Entscheidungstempo</span><strong class="care-ink">68%</strong></div><div class="h-2.5 rounded-full bg-slate-500/15"><div class="bar-fill h-full w-[68%] rounded-full bg-amber-400"></div></div></div>
+                    </div>
+                </section>
+                <section class="care-soft rounded-2xl border p-5" aria-labelledby="recommendation-heading">
+                    <p class="care-kicker text-[10px] font-bold uppercase tracking-[.18em]">Stärken &amp; Fokus</p><h3 id="recommendation-heading" class="mt-2 font-display text-base font-bold care-ink">Persönliche Empfehlung</h3>
+                    <div class="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4"><strong class="text-sm text-emerald-500">Stärke: Anatomie</strong><p class="mt-1 text-xs leading-5 care-muted">Sichere Erkennung der Leitstrukturen in PLAX und A4C.</p></div>
+                    <div class="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 p-4"><strong class="text-sm text-amber-500">Fokus: Tempo</strong><p class="mt-1 text-xs leading-5 care-muted">Trainieren Sie fokussierte Befundung unter 7 Minuten.</p></div>
+                    <button type="button" id="statistics-training" class="mt-4 w-full rounded-xl bg-clinical-400 px-4 py-3 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-300">Empfohlenes Training starten</button>
+                </section>
+            </div>
+            <p class="mt-5 text-center text-[11px] care-muted">Auswertungen dienen ausschließlich der Lernreflexion und sind keine klinische Leistungsbeurteilung.</p>
+        </div>
+    </div>
+    <div id="toast" class="fixed bottom-6 left-1/2 z-[60] hidden -translate-x-1/2 rounded-full bg-[#173a3b] px-5 py-3 text-center text-sm font-semibold text-white shadow-xl" role="status" aria-live="polite"></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // UI lädt zentrale Daten, Backend-Endpunkt bleibt unverändert
-            await LBApp.loadData();
-            const featuredItems = LBApp.getFeatured().slice(0, 3);
-            const container = document.getElementById('featured-container');
+        const completeButton = document.getElementById('complete-test');
+        const assessment = document.getElementById('assessment');
+        const progressBar = document.getElementById('progress-bar');
+        const progressNumber = document.getElementById('progress-number');
+        const progressCopy = document.getElementById('progress-copy');
+        const progressTrack = document.getElementById('progress-track');
+        const passedBadge = document.getElementById('passed-badge');
 
-            if (featuredItems.length > 0) {
-                container.innerHTML = featuredItems.map(item => LBApp.renderCard(item)).join('');
-                container.querySelectorAll('.group').forEach((card, index) => {
-                    card.classList.add('animate-fade-in');
-                    card.style.animationDelay = `${index * 150}ms`;
-                });
-            } else {
-                container.innerHTML = '<p class="text-center text-red-500 col-span-full">Keine Daten.</p>';
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('sono-theme');
+        const setTheme = (examMode) => {
+            document.documentElement.toggleAttribute('data-theme', examMode);
+            if (examMode) document.documentElement.dataset.theme = 'exam';
+            themeToggle.setAttribute('aria-pressed', String(examMode));
+            themeToggle.setAttribute('aria-label', examMode ? 'Untersuchungsmodus deaktivieren' : 'Untersuchungsmodus aktivieren');
+            localStorage.setItem('sono-theme', examMode ? 'exam' : 'light');
+        };
+        setTheme(savedTheme === 'exam');
+        themeToggle.addEventListener('click', () => setTheme(themeToggle.getAttribute('aria-pressed') !== 'true'));
+
+        const showToast = (message) => {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('hidden', 'toast-enter');
+            requestAnimationFrame(() => toast.classList.add('toast-enter'));
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.add('hidden'), 3200);
+        };
+
+        completeButton.addEventListener('click', () => {
+            const unanswered = [...document.querySelectorAll('#quiz-form fieldset')].filter(fieldset => !fieldset.querySelector('input:checked'));
+            if (unanswered.length) {
+                unanswered[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                unanswered[0].querySelector('.question-card').focus?.();
+                showToast(`Bitte beantworten Sie noch ${unanswered.length === 1 ? 'eine Frage' : `${unanswered.length} Fragen`}.`);
+                return;
+            }
+            completeButton.disabled = true;
+            assessment.style.opacity = '0';
+            assessment.style.transform = 'translateY(10px)';
+
+            window.setTimeout(() => {
+                assessment.classList.add('hidden');
+                progressBar.style.width = '100%';
+                progressTrack.setAttribute('aria-valuenow', '100');
+                progressNumber.innerHTML = '100<span class="text-lg text-slate-500">%</span>';
+                progressCopy.textContent = 'abgeschlossen';
+                passedBadge.classList.remove('hidden');
+                passedBadge.classList.add('flex');
+                requestAnimationFrame(() => passedBadge.classList.remove('translate-y-2', 'opacity-0'));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 450);
+        });
+
+        const videoButton = document.getElementById('video-placeholder');
+        const videoProgress = document.getElementById('video-progress');
+        const videoLabel = document.getElementById('video-label');
+        videoButton.addEventListener('click', () => {
+            videoProgress.style.width = '100%';
+            videoLabel.textContent = 'Loop läuft';
+            window.setTimeout(() => {
+                videoProgress.style.transitionDuration = '0ms';
+                videoProgress.style.width = '0%';
+                videoLabel.textContent = 'Clip erneut starten';
+                requestAnimationFrame(() => videoProgress.style.transitionDuration = '5000ms');
+            }, 5100);
+        });
+
+        document.getElementById('continue-test').addEventListener('click', () => document.getElementById('assessment').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        document.getElementById('new-simulation').addEventListener('click', () => {
+            document.getElementById('quiz-form').reset();
+            videoProgress.style.width = '0%';
+            videoLabel.textContent = 'Clip starten';
+            document.getElementById('video-placeholder').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            showToast('Neue Simulation wurde vorbereitet.');
+        });
+
+        const profileButton = document.getElementById('profile-button');
+        const profileMenu = document.getElementById('profile-menu');
+        profileButton.addEventListener('click', () => {
+            const opening = profileMenu.classList.contains('hidden');
+            profileMenu.classList.toggle('hidden');
+            profileButton.setAttribute('aria-expanded', String(opening));
+        });
+        document.addEventListener('click', (event) => {
+            if (!profileMenu.contains(event.target) && !profileButton.contains(event.target)) {
+                profileMenu.classList.add('hidden');
+                profileButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.querySelectorAll('[data-toast]').forEach(button => button.addEventListener('click', () => showToast(button.dataset.toast)));
+
+        const referenceModal = document.getElementById('reference-modal');
+        const referenceTitle = document.getElementById('reference-title');
+        const referenceContent = document.getElementById('reference-content');
+        const references = {
+            'Anatomische Orientierung': '<strong>PLAX-Leitstrukturen</strong><br>Rechter Ventrikel · Interventrikuläres Septum · linker Ventrikel · Mitralklappe · linksventrikulärer Ausflusstrakt · Aortenwurzel · linker Vorhof.',
+            'Norm- & Grenzwerte': '<strong>Visuelle Orientierung</strong><br>Normale LVEF: &gt; 55 % · TAPSE: &gt; 17 mm · VCI: ≤ 21 mm mit inspiratorischem Kollaps &gt; 50 %. Werte immer im klinischen Kontext interpretieren.'
+        };
+        document.querySelectorAll('[data-reference]').forEach(button => button.addEventListener('click', () => {
+            referenceTitle.textContent = button.dataset.reference;
+            referenceContent.innerHTML = references[button.dataset.reference];
+            referenceModal.classList.remove('hidden');
+            referenceModal.classList.add('flex');
+            document.getElementById('close-reference').focus();
+        }));
+        const closeReference = () => { referenceModal.classList.add('hidden'); referenceModal.classList.remove('flex'); };
+        document.getElementById('close-reference').addEventListener('click', closeReference);
+        referenceModal.addEventListener('click', event => { if (event.target === referenceModal) closeReference(); });
+        const statisticsModal = document.getElementById('statistics-modal');
+        const statisticsButton = document.getElementById('open-statistics');
+        const statisticsPanel = document.getElementById('statistics-panel');
+        const closeStatisticsButton = document.getElementById('close-statistics');
+        const openStatistics = () => {
+            statisticsModal.classList.remove('hidden');
+            statisticsModal.classList.add('flex');
+            statisticsPanel.classList.add('modal-enter');
+            document.body.style.overflow = 'hidden';
+            closeStatisticsButton.focus();
+        };
+        const closeStatistics = () => {
+            statisticsModal.classList.add('hidden');
+            statisticsModal.classList.remove('flex');
+            statisticsPanel.classList.remove('modal-enter');
+            document.body.style.overflow = '';
+            statisticsButton.focus();
+        };
+        statisticsButton.addEventListener('click', openStatistics);
+        closeStatisticsButton.addEventListener('click', closeStatistics);
+        statisticsModal.addEventListener('click', event => { if (event.target === statisticsModal) closeStatistics(); });
+        document.getElementById('statistics-training').addEventListener('click', () => {
+            closeStatistics();
+            document.getElementById('assessment').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('Training „Fokussierte Befundung“ wurde vorbereitet.');
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                if (!statisticsModal.classList.contains('hidden')) closeStatistics();
+                closeReference();
+                profileMenu.classList.add('hidden');
             }
         });
     </script>
-
-    <script>
-    // sanfte Interaktion: confetti bei hover bleibt, Palette angepasst
-    const btnParty = document.getElementById('hero-secondary');
-    if(btnParty) {
-        btnParty.addEventListener('mouseenter', (e) => {
-            const rect = btnParty.getBoundingClientRect();
-            const x = (rect.left + rect.width / 2) / window.innerWidth;
-            const y = (rect.top + rect.height / 2) / window.innerHeight;
-            if (window.confetti) {
-                confetti({
-                    particleCount: 40,
-                    spread: 50,
-                    origin: { x: x, y: y },
-                    colors: ['#2f9d82', '#9fbf9a', '#f5efe6'],
-                    disableForReducedMotion: true,
-                    scalar: 0.8
-                });
-            }
-        });
-    }
-    </script>
-
-    <script src="assets/js/catalog.js"></script>
 </body>
 </html>
